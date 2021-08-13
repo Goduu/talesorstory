@@ -1,7 +1,7 @@
-# GraphQL + React Tale Booking API
-This code belongs to a tutorial series: [https://github.com/academind/yt-graphql-react-tale-booking-api.git](https://github.com/academind/yt-graphql-react-tale-booking-api.git)
+# MongoDB + GraphQL + React Tale Teling APP
 
-Learn how to build a GraphQL API (with Node.js) and a React.js frontend from scratch in this series.
+This app has the purpouse to demonstrate the functionalities of GraphQL with React and MongoDB.
+It's a system of writing small tales, reading it from others and commenting. 
 
 # Usage
 Choose the right branch in this repository to get the code for the different parts of the series.
