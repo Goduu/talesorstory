@@ -184,18 +184,22 @@ function TalesPage(props) {
   };
 
   const commentTaleHandler = (comment) => {
+    console.log("context", context)
     if (!context.token) {
-      setSelectedTale(null)
       return;
     }
     const requestBody = {
       query: `
           mutation CommentTale($id: ID!, $text: String!) {
             commentTale(taleId: $id, text: $text) {
-              _id
-             createdAt
-             updatedAt
-             text
+              tale{
+                _id
+              }
+              user {
+                email
+              }
+              text
+              createdAt
             }
           }
         `,
@@ -220,8 +224,15 @@ function TalesPage(props) {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-        setSelectedTale(null)
+        let tale = resData.data.commentTale;
+        tales.find(t => t._id === tale.tale._id).comments.push(
+          {
+            createdAt: tale.createdAt,
+            text: tale.text,
+            user: tale.user
+          }
+        )
+        console.log("alcapaha",resData, tales);
       })
       .catch(err => {
         console.log(err);

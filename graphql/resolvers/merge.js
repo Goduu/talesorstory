@@ -15,8 +15,9 @@ const userLoader = new DataLoader(userIds => {
 });
 
 const commentLoader = new DataLoader(commentIds => {
-  console.log("comment loaders", commentIds.filter(c => c !== ''), typeof commentIds)
-  return Comment.find({ _id: { $in: ["6116827528f0534260909e6b"] } });
+  return comments(commentIds)
+  // console.log("comment loaders", commentIds, typeof commentIds)
+  // return Comment.find({ _id: { $in: commentIds.filter(c => c !== '') } });
 });
 
 const tales = async taleIds => {
@@ -36,6 +37,7 @@ const tales = async taleIds => {
 };
 
 const singleTale = async taleId => {
+  console.log("taleId--", taleId)
   try {
     const tale = await taleLoader.load(taleId.toString());
     return tale;
@@ -59,28 +61,29 @@ const user = async userId => {
   }
 };
 
-const comment = async commentIds => {
+const comments = async commentIds => {
   console.log("comments iD", commentIds)
   try {
-    const comment = await commentLoader.load(commentIds.toString());
-    console.log("Comments final",comment)
-    return {
-      ...comment._doc,
-      _id: comment.id,
-    };
+    const comments = await Comment.find({ _id: { $in: commentIds } });
+    console.log("Comments final",comments)
+    return comments.map(comment => {
+      return transformComment(comment)
+    })
   } catch (err) {
     throw err;
   }
 };
 
+
 const transformTale = tale => {
+  console.log("Tale transf",tale)
   return {
     ...tale._doc,
     _id: tale.id,
     date: dateToString(tale._doc.date),
     creator: user.bind(this, tale.creator),
-    comments: comment.bind(this, tale.comments)
-  };
+    comments: () => commentLoader.loadMany(tale.comments) 
+  }
 };
 
 const transformComment = comment => {
@@ -88,7 +91,7 @@ const transformComment = comment => {
     ...comment._doc,
     _id: comment.id,
     user: user.bind(this, comment._doc.user),
-    tale: singleTale.bind(this, comment._doc.tale),
+    tale: singleTale.bind(this, comment._doc.tale._id),
     createdAt: dateToString(comment._doc.createdAt),
     updatedAt: dateToString(comment._doc.updatedAt),
     text: comment.text

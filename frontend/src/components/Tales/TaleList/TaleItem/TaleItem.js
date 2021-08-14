@@ -28,7 +28,6 @@ const taleItem = props => {
             variant="body2"
             color="textPrimary"
             maxRows={1}
-            
           >
           {props.text}
           </Typography>

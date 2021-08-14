@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Collapse, IconButton, makeStyles, Paper, Typography } from "@material-ui/core";
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Collapse, IconButton, List, ListItem, ListItemAvatar, ListItemText, makeStyles, Paper, Typography } from "@material-ui/core";
 import NewCommentDialog from "./NewCommentDialog";
 import { useAuthContext } from "../../context/auth-context";
 
@@ -54,7 +54,7 @@ function Tale(props) {
                             title="Paella dish"
                         />
                         <CardContent>
-                            <Typography variant="body2" color="textSecondary" component="p">
+                            <Typography variant="body2" color="textSecondary" >
                                 {props.tale.text}
                             </Typography>
                         </CardContent>
@@ -76,18 +76,22 @@ function Tale(props) {
                         </CardActions>
                         <Collapse in={expanded} timeout="auto" unmountOnExit>
                             <CardContent>
-                                {props.tale.comments && props.tale.comments.map(c => {
-                                    return (
-                                        <>
-                                            <Typography paragraph>{c.user.email}</Typography>
-                                            <Typography paragraph>{c.createdAt}</Typography>
-                                            <Typography paragraph>
-                                                {c.text}
-                                            </Typography>
-                                        </>
+                                <List style={{width: '100%'}}>
 
-                                    )
-                                })}
+                                    {props.tale.comments && props.tale.comments.map(c => {
+                                        return (
+                                            <ListItem key={`${c.createdAt} - ${c.user.email}`}>
+                                                <ListItemAvatar>
+                                                    <Avatar>
+                                                        {c.user.email[0]}
+                                                    </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemText primary={`${c.user.email} - ${c.createdAt}`} secondary={c.text} />
+                                            </ListItem>
+
+                                        )
+                                    })}
+                                </List>
                             </CardContent>
                         </Collapse>
                     </>
