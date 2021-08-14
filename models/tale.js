@@ -18,6 +18,10 @@ const taleSchema = new Schema({
   creator: {
       type: Schema.Types.ObjectId,
       ref: 'User'
+  },
+  comments: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Comment'
   }
 });
 

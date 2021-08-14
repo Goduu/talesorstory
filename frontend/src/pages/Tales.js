@@ -5,7 +5,7 @@ import TaleList from '../components/Tales/TaleList/TaleList';
 import Spinner from '../components/Spinner/Spinner';
 import { useAuthContext } from '../context/auth-context';
 import './Tales.css';
-import { makeStyles } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import Tale from '../components/Tale/Tale';
 
 const useStyles = makeStyles((theme) => ({
@@ -135,6 +135,13 @@ function TalesPage(props) {
                 _id
                 email
               }
+              comments {
+                user {
+                  email
+                }
+                text
+                createdAt
+              }
             }
           }
         `
@@ -176,24 +183,25 @@ function TalesPage(props) {
     })
   };
 
-  const bookTaleHandler = () => {
+  const commentTaleHandler = (comment) => {
     if (!context.token) {
       setSelectedTale(null)
       return;
     }
-    console.log(selectedTale)
     const requestBody = {
       query: `
-          mutation BookTale($id: ID!) {
-            bookTale(taleId: $id) {
+          mutation CommentTale($id: ID!, $text: String!) {
+            commentTale(taleId: $id, text: $text) {
               _id
              createdAt
              updatedAt
+             text
             }
           }
         `,
       variables: {
-        id: selectedTale._id
+        id: selectedTale._id,
+        text: comment
       }
     };
 
@@ -265,7 +273,7 @@ function TalesPage(props) {
             authUserId={context && context.userId}
             onViewDetail={showDetailHandler}
           />
-          <Tale tale={selectedTale} />
+          <Tale tale={selectedTale} saveComment={commentTaleHandler} />
         </div>
 
       )}

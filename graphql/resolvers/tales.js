@@ -7,6 +7,7 @@ module.exports = {
   tales: async () => {
     try {
       const tales = await Tale.find();
+      console.log("tales sonic", tales)
       return tales.map(tale => {
         return transformTale(tale);
       });
@@ -22,7 +23,8 @@ module.exports = {
       title: args.taleInput.title,
       text: args.taleInput.text,
       date: new Date(),
-      creator: req.userId
+      creator: req.userId,
+      comments: []
     });
     let createdTale;
     try {

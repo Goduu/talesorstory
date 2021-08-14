@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
+import { Typography } from "@material-ui/core";
 import { AuthProvider, useAuthContext } from '../../context/auth-context';
 import './MainNavigation.css';
 
@@ -10,7 +10,9 @@ const mainNavigation = props => {
   return (
     <header className="main-navigation">
       <div className="main-navigation__logo">
-        <h1>EasyTale</h1>
+        <Typography variant="h1" >
+          Talesorstory
+        </Typography>
       </div>
       <nav className="main-navigation__items">
         <ul>
@@ -22,7 +24,7 @@ const mainNavigation = props => {
           <li>
             <NavLink to="/tales">Tales</NavLink>
           </li>
-          {context &&  context.token && (
+          {context && context.token && (
             <React.Fragment>
               <li>
                 <NavLink to="/bookings">Bookings</NavLink>
